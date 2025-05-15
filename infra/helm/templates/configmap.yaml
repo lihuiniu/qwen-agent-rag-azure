@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+data:
+  TENANT_ID: "default"
+  REDIS_PREFIX: "tenant_default_"
