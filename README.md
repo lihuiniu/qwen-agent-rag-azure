@@ -89,10 +89,10 @@ See the `docs/qwen_agent_architecture.png` for the full architecture diagram.
 
 ```mermaid
 graph TD
-    A[Trigger Reindex API] --> B[Fetch Document by ID]
-    B --> C[Chunking (Splitter)]
-    C --> D[Embed Chunks]
-    D --> E[Upsert into Redis 8.0 Vector Store]
+    A["Trigger Reindex API"] --> B["Fetch Document by ID"]
+    B --> C["Chunking (Splitter)"]
+    C --> D["Embed Chunks"]
+    D --> E["Upsert into Redis 8.0 Vector Store"]
 ```
 
 ## 🚀 Deployment Guide
