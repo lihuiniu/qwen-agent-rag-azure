@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api import feedback, rag, retrain, metrics, vectorops
+from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI()
 app.include_router(feedback.router, prefix="/feedback")
@@ -7,3 +8,6 @@ app.include_router(rag.router, prefix="/rag")
 app.include_router(retrain.router, prefix="/retrain")
 app.include_router(metrics.router, prefix="/metrics")
 app.include_router(vectorops.router, prefix="/vector")
+app.include_router(eval_router, prefix="/eval")
+
+Instrumentator().instrument(app).expose(app)
