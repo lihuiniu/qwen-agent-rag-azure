@@ -7,8 +7,20 @@ helm upgrade --install qwen-agent ./infra/helm --values infra/helm/values.yaml -
 
 ## ✅ Evaluation-Based Rollout
 New agent versions are deployed **only after**:
-- Offline evaluation (LangChain Eval) meets thresholds
+- Offline evaluation (LangChain Eval) meets thresholds:
+-- Precision@5 ≥ 0.85
+-- Factuality ≥ 0.9
 - Online feedback (engagement, feedback scores) exceed SLA
+-- Online feedback engagement > 0.9
+
+
+## ✅ Rollout Strategy
+GitHub Actions blocks Helm rollout unless test + eval passes.
+
+## 🚀 Observability (Optional Prometheus Middleware)
+```bash
+pip install prometheus-fastapi-instrumentator
+```
 
 ## 🧠 Multi-Tenant Support
 Each tenant uses:
