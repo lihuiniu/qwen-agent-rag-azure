@@ -1,0 +1,22 @@
+
+graph TD
+    A[User] --> B[FastAPI Gateway]
+    B --> C[Agent API]
+    C --> D[Redis 8.0 Vector Store]
+    C --> E[Redis Cache Layer]
+    C --> F[LangChain Eval]
+    F --> G[Eval Gatekeeper]
+    G -->|If Passed| H[Helm Rollout (Per Tenant)]
+    C --> I[Feedback API]
+    I --> J[Retraining Pipeline]
+    J --> K[Model Update Trigger]
+    G --> L[Azure Blob (Offline Eval)]
+    H --> M[AKS Deployment]
+    M --> N[HPA / Service / ConfigMap]
+    M --> O[Monitoring (Prometheus + Grafana)]
+    subgraph Tenants
+        P[agent-v1-tenantA]
+        Q[agent-v1-tenantB]
+    end
+    H --> P
+    H --> Q

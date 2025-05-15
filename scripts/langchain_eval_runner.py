@@ -9,6 +9,13 @@ def run_eval():
     
     return {"score": 0.88}
 
+def evaluate_batch(examples, predictions):
+    evaluator = load_evaluator("criteria", criteria="factuality")
+    results = []
+    for ex, pred in zip(examples, predictions):
+        result = evaluator.evaluate(ex, pred)
+        results.append(result)
+    return results
 
 examples = [{"query": "Why was my Azure Storage account access denied?", "expected": "Access policy violation"}]
 predictions = [{"result": "Check IAM role assignments"}]
