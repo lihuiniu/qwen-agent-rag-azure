@@ -22,21 +22,31 @@ graph TD
     C --> D[Redis 8.0 Vector Store]
     C --> E[Redis Cache Layer]
     C --> F[LangChain Eval]
-    F --> G[Eval Gatekeeper]
-    G --> H[Helm Rollout (Per Tenant)]
+
+    G[Eval Gatekeeper]
+    F --> G
+
+    H["Helm Rollout (Per Tenant)"]
+    G --> H
+
+    H --> M[AKS Deployment]
+    M --> N["HPA / Service / ConfigMap"]
+    M --> O["Monitoring (Prometheus + Grafana)"]
     C --> I[Feedback API]
     I --> J[Retraining Pipeline]
-    J --> K[Model Update Trigger]
-    G --> L[Azure Blob (Offline Eval)]
-    H --> M[AKS Deployment]
-    M --> N[HPA / Service / ConfigMap]
-    M --> O[Monitoring (Prometheus + Grafana)]
+    J --> K["Model Update Trigger"]
+G --> L["Azure Blob (Offline Eval)"]
+
     subgraph Tenants
+        direction TB
         P[agent-v1-tenantA]
         Q[agent-v1-tenantB]
     end
-    M --> P
-    M --> Q
+
+    X((Tenants))
+    M --> X
+    X --> P
+    X --> Q
 ```
 
 ### Core Components
@@ -53,13 +63,13 @@ See the `docs/qwen_agent_architecture.png` for the full architecture diagram.
 
 ```mermaid
 graph TD
-    A[User Query] --> B[Retrieve Documents (Redis/ANN)]
-    B --> C[Agent Response]
-    C --> D[LangChain Eval (Online)]
-    C --> E[Store for Offline Eval (Blob)]
-    D --> F{Pass Eval Gate?}
-    F -- Yes --> G[Helm Rollout or Serve]
-    F -- No --> H[Hold Deployment]
+    A["User Query"] --> B["Retrieve Documents - Redis ANN"]
+    B --> C["Agent Response"]
+    C --> D["LangChain Eval (Online)"]
+    C --> E["Store for Offline Eval (Blob)"]
+    D --> F{"Pass Eval Gate?"}
+    F -- Yes --> G["Helm Rollout or Serve"]
+    F -- No --> H["Hold Deployment"]
 ```
 
 ## Feedback Flow
@@ -67,7 +77,7 @@ See the `docs/qwen_agent_architecture.png` for the full architecture diagram.
 
 ```mermaid
 graph TD
-    A[User Feedback (Upvote/Downvote/Rating)] --> B[Feedback API]
+    A["User Feedback - Upvote, Downvote, Rating"] --> B[Feedback API]
     B --> C[Store Feedback + Comments]
     C --> D[LangChain Eval Update]
     D --> E[Trigger Retrain Pipeline]
